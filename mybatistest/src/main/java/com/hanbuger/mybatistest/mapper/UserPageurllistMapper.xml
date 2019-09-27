@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hanbuger.mybatistest.mapper.UserPageurllistMapper">
+	<resultMap id="BaseResultMap" type="UserPageurllistExt">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="ACCOUNT_NAME" property="accountName" jdbcType="VARCHAR" />
+		<id column="PAGEPART_NAME" property="pagepartName" jdbcType="VARCHAR" />
+		<id column="PAGE_NAME" property="pageName" jdbcType="VARCHAR" />
+		<result column="PAGE_URL" property="pageUrl" jdbcType="VARCHAR" />
+		<result column="PAGE_STATUS" property="pageStatus" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<association property="user" javaType="UserAccount">
+			<result property="accountName" column="ACCOUNT_NAME" />
+			<result property="phoneNo" column="PHONE_NO" />
+		</association>
+	</resultMap>
+
+	<select id="selectPageListById" parameterType="int" resultMap="BaseResultMap">
+		select a.*,b.account_name,b.phone_no from
+		user_pageurllist a left outer
+		join user_account b
+		on a.account_name = b.account_name
+		where a.id =
+		#{id}
+	</select>
+</mapper>

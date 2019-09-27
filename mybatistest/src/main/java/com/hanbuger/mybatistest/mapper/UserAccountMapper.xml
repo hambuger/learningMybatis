@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hanbuger.mybatistest.mapper.UserAccountMapper">
+	<resultMap id="BaseResultMap" type="UserAccountExt">
+		<result column="PHONE_NO" property="phoneNo" jdbcType="VARCHAR" />
+		<collection property="pageurllists" ofType="UserPageurllist">
+			<id column="id" property="id" jdbcType="INTEGER" />
+			<id column="ACCOUNT_NAME" property="accountName" jdbcType="VARCHAR" />
+			<id column="PAGEPART_NAME" property="pagepartName" jdbcType="VARCHAR" />
+			<id column="PAGE_NAME" property="pageName" jdbcType="VARCHAR" />
+			<result column="PAGE_URL" property="pageUrl" jdbcType="VARCHAR" />
+			<result column="PAGE_STATUS" property="pageStatus" jdbcType="VARCHAR" />
+			<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		</collection>
+	</resultMap>
+
+	<select id="getPageListByName" parameterType="String" resultMap="BaseResultMap">
+		select a.phone_no,b.* from user_account a
+		left outer join
+		user_pageurllist b on a.account_name = b.account_name
+		where
+		a.account_name = #{name}
+	</select>
+
+	<select id="queryByNameList" parameterType="java.util.List"
+		resultType="UserAccount">
+		select *
+		from user_account
+		where
+		account_name in
+		<foreach item="item" collection="list" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>
